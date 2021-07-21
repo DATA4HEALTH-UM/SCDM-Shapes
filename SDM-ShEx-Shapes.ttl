@@ -1,0 +1,145 @@
+PREFIX : <http://example.org/SDM.shex>
+PREFIX sdm: <http://www.semanticweb.org/catimc/ontologies/2018/6/SemanticDataModel#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+<OwlClass> {
+  rdf:type [ owl:Class ] {1};
+}
+<ClinicalStatementClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf {
+	rdfs:subClassOf [ sdm:ClinicalStatement ];
+}
+<HealthcareProcessClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf {
+	rdfs:subClassOf [ sdm:HealthcareProcess ];	
+}
+<StatementTemporalQualifierClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf {
+	rdfs:subClassOf [ sdm:StatementTemporalQualifier ];
+}
+<StatementSituationQualifierClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf{
+	rdfs:subClassOf [ sdm:StatementSituationQualifier ];
+}
+<StatementActionQualifierClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf{
+	rdfs:subClassOf [ sdm:StatementActionQualifier ];
+}
+<SituationSeverityQualifierClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf {
+	rdfs:subClassOf [ sdm:SituationSeverityQualifier ];
+}
+<SituationClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf {
+	rdfs:subClassOf [ sdm:Situation ];
+}
+<ObservableClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf {
+	rdfs:subClassOf [ sdm:Observable ];
+}
+<ProcedureClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf {
+	rdfs:subClassOf [ sdm:Process ];	
+}
+<UnitsOfMeasurementClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf {
+	rdfs:subClassOf [ sdm:UnitsOfMeasurement ];	
+}
+<ProviderOfInformationClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf{
+	rdfs:subClassOf [ sdm:ProviderOfInformation ];	
+}
+<SubjectOfInformationClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf{
+	rdfs:subClassOf [ sdm:Person ];	
+}
+<BodyStructureClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf{
+	rdfs:subClassOf [ sdm:BodyStructure ];	
+}
+<HealthcareProfessionalClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf{
+	rdfs:subClassOf [ sdm:HealthcareProfessional ];	
+}
+<HealthcareProcessParticipantClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf{
+	rdfs:subClassOf [ sdm:HealthcareProcessParticipant ];	
+}
+<PersonClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf{
+	rdfs:subClassOf [ sdm:Person ];	
+}
+<ValueRegionClass> IRI @<OwlClass> AND EXTRA rdfs:subClassOf{
+	rdfs:subClassOf [ sdm:ValueRegion ];
+}
+
+<HealthcareProcessShape> IRI {
+	a @<HealthcareProcessClass> ;
+	sdm:start xsd:dateTime ? ;
+	sdm:end xsd:dateTime ? ;
+	sdm:duration xsd:duration ? ;
+	sdm:agent @<HealthcareProfessionalClass> * ;
+	sdm:otherParticipants @<HealthcareProcessParticipantClass> * ;
+	sdm:hasSubProcess @<HealthcareProcessShape> * ;
+}
+
+<ClinicalStatementShape> IRI {
+	a @<ClinicalStatementClass> ;
+	sdm:hasPart @<ClinicalStatementShape> * ;
+	sdm:isResultOf @<HealthcareProcessShape> ;
+	sdm:temporalContext @<StatementTemporalQualifierClass> ;
+	sdm:hasInformationAboutProvider @<InformationAboutProviderOfInformationShape> * ;
+	sdm:hasInformationAboutSubject @<InformationAboutSubjectOfInformationShape> ;
+}
+
+
+<ClinicalSituationStatementShape> IRI AND @<ClinicalStatementShape> AND {
+	sdm:situationContext @<StatementSituationQualifierClass> ; 
+	sdm:severity @<SituationSeverityQualifierClass> ? ; 
+	sdm:representsSituation @<SituationClass> ;
+	sdm:interpretsObservable @<ObservableClass> ?; 
+
+}
+
+<ClinicalProcedureStatementShape> IRI AND @<ClinicalStatementShape> AND{
+	sdm:procedureContext @<StatementActionQualifierClass> ;
+	sdm:representsProcedure @<ProcedureClass> ;
+}
+
+<ObservationResultStatementShape> IRI AND @<ClinicalStatementShape> AND{
+	sdm:hasObservable @<ObservableClass> ; 
+	sdm:hasValue @<QuantitativeResultValueShape> OR @<QualitativeResultValueShape> ; 
+	sdm:procedureContext @<StatementActionQualifierClass> ? | sdm:situationContext @<StatementSituationQualifierClass> ? ; 
+	sdm:isInterpretedBySituation @<SituationClass> ?; 
+}
+
+<QuantitativeResultValueShape> IRI {
+ 	a [sdm:QuantitativeResultValueShape] ;
+	sdm:units @<UnitsOfMeasurementClass> ?;
+	sdm:value xsd:int OR xsd:double OR @<IntegerIntervalShape> ;
+}
+
+<QualitativeResultValueShape> IRI {
+	a [sdm:QualitativeResultValueShape] ;
+	sdm:value @<ValueRegionClass> OR xsd:string ;
+}
+
+<IntegerIntervalShape> IRI {
+	a [sdm:IntegerInterval] ;
+	sdm:hasLowerBound xsd:int ;
+	sdm:hasUpperBound xsd:int ;
+}
+
+<InformationAboutProviderOfInformationShape> IRI{
+	a [ sdm:InformationAboutProviderOfInformation ];
+	sdm:providerOfInformation @<ProviderOfInformationClass> ;
+}
+<InformationAboutSubjectOfInformationShapes> IRI {
+	a [ sdm:InformationAboutSubjectOfInformation ];
+	sdm:subjectOfInformation @<PersonClass> ;
+}
+
+<ProcedureShape> IRI{
+	a @<ProcedureClass> ;
+	sdm:procedureSite <BodyStructureClass> *;
+	sdm:procedureStart xsd:dateTime ?;
+	sdm:procedureEnd xsd:dateTime ?;
+	sdm:associatedWithSituation @<SituationShape> *;
+}
+
+<SituationShape> IRI {
+	a @<SituationClass> ;
+	sdm:conditionSite <BodyStructureClass> * ;
+	sdm:conditionStart xsd:dateTime ? ;
+	sdm:conditionEnd xsd:dateTime ? ;
+	sdm:associatedWithProcedure @<ProcedureClass> * ;
+}
+
+
