@@ -1,0 +1,59 @@
+@prefix smp: <http://btl2-patternsExtension#> .
+@prefix btl2: <http://purl.org/biotop/btl2.owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sct: <http://snomed.info/id/>  .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@base <http://btl2-patternsExtension> .
+
+
+<http://btl2-patternsExtension> rdf:type owl:Ontology ;
+  rdfs:label "Semantic Patterns Extension Ontology" ;
+  owl:imports <file:///Users/Cati/Documents/CATI%20TRABAJO%202016/PROYECTOS%20SW%202016/SEMANTIC-CIMI/src/cimi/semantic/shacl/btl2.owl> ,
+  <file:///Users/Cati/Documents/CATI%20TRABAJO%202016/PROYECTOS%20SW%202016/SEMANTIC-CIMI/src/cimi/semantic/shacl/BTL2-SCT.ttl> .
+  
+
+  #				#	
+  #	CLASSES		#
+  #				#
+  
+smp:ObservationResult rdf:type rdfs:Class ; rdfs:subClassOf btl2:InformationObject .
+smp:Process rdf:type rdfs:Class ; rdfs:subClassOf btl2:Process .
+smp:Datatype rdf:type rdfs:Class ; rdfs:subClassOf btl2:InformationObject . 
+smp:ObservationResultSet rdf:type rdfs:Class ; rdfs:subClassOf btl2:InformationObject . 
+smp:Plan rdf:type rdfs:Class ; rdfs:subClassOf btl2:Plan .
+
+
+
+
+# SCT #
+
+smp:ObservableEntity rdf:type rdfs:Class; rdfs:subClassOf sct:363787002 ; rdfs:subClassOf btl2:Quality .
+smp:ClinicalFinding rdf:type rdfs:Class; rdfs:subClassOf sct:404684003 ; rdfs:subClassOf btl2:Situation .
+smp:Procedure rdf:type rdfs:Class; rdfs:subClassOf sct:71388002 .
+smp:Person rdf:type rdfs:Class; rdfs:subClassOf sct:125676002 .
+smp:Technique rdf:type rdfs:Class; rdfs:subClassOf sct:272394005 ; rdfs:subClassOf btl2:ValueRegion .
+smp:ActionValues rdf:type rdfs:Class; rdfs:subClassOf sct:288532009 .
+smp:Location rdf:type rdfs:Class; rdfs:subClassOf sct:308916002 ;rdfs:subClassOf btl2:MaterialObject .
+
+#				#
+# RDF PROPERTIES #
+#				#
+
+smp:IsResultOfProcess rdf:type rdf:Property .
+smp:isAbout rdf:type rdf:Property .
+smp:hasObservedValue rdf:type rdf:Property .
+smp:hasInformationPart rdf:type rdf:Property .
+smp:isDenotedBy rdf:type rdf:Property .
+smp:hasTemporalValue rdf:type rdf:Property .
+smp:hasResult rdf:type rdf:Property .
+smp:hasParticipant rdf:type rdf:Property .
+smp:hasQuality rdf:type rdf:Property .
+smp:isDueTo rdf:type rdf:Property .
+smp:happensBefore rdf:type rdf:Property .
+smp:isIncludedIn rdf:type rdf:Property .
+smp:performsProcess rdf:type rdf:Property .
+smp:happensAfter rdf:type rdf:Property .
+smp:hasAgent rdf:type rdf:Property .
+smp:hasValue rdf:type rdf:Property .
